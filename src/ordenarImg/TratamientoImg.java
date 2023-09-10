@@ -1,18 +1,23 @@
 package ordenarImg;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import ordenarImg.Ruta.*;
-
-public class Archivo {
+public class TratamientoImg {
 	
-	Ruta pathOrigen;
-	Ruta pathDestino;
+	Path pathOrigen;
+	Path pathDestino;
 	List<File> archivos;
+	List<String> listaDenombresCarpetasDestinos;
+	//List<Path> rutas;
 	
-	private Archivo(Ruta pathOrigen, Ruta pathDestino) {
+	public TratamientoImg(Path pathOrigen, Path pathDestino) {
 		this.pathOrigen = pathOrigen;
 		this.pathDestino = pathDestino;
 		this.archivos = this.archivos();
@@ -20,7 +25,7 @@ public class Archivo {
 	
 	public List<File> archivos (){
 		//retorna una List de objetos File
-		File carpeta = new File(pathOrigen.getRuta());	
+		File carpeta = new File(pathOrigen.toString());	
 		return Arrays.asList(carpeta.listFiles());  
 	}
 	
@@ -62,13 +67,7 @@ public class Archivo {
 		return archivo.getName().substring(archivo.getName().indexOf('.'), archivo.getName().length());
 	}
 	
-	public String nombreCarpetaDestino(File archivo) {
-		//retorna el nombre de la carpeta donde se guardaran las img
-		return getAnioArchivo(archivo)+"_"+mesAmesNombre(getMesArchivo(archivo));
-	}
-	
-
-	public String mesAmesNombre(String mes) {
+	public String mesNumeroAMesNombre(String mes) {
 		//toma el numero del mes y lo retorna como nombre
 		String nombreMes = "";
 		switch(mes) {
@@ -88,16 +87,52 @@ public class Archivo {
 		return nombreMes;		
 	}
 	
-
-	public String pathArchivoDestino(String pathDestino, File archivo) {
-		//retorna el path de la carpeta destino completo
-		return pathDestino + "\\" + nombreCarpetaDestino(archivo);
+	public String nombreCarpetaDestino(File archivo) {
+		//retorna el nombre de la carpeta donde se guardaran las img
+		return getAnioArchivo(archivo)+"_"+ mesNumeroAMesNombre(getMesArchivo(archivo));
 	}
 	
-	public void crearCarpeta(String pathArchivoDestino) {
+	public List<String> nombresCarpetasDestinos(){
+		archivos.forEach(arch -> 		
+			listaDenombresCarpetasDestinos.add(nombreCarpetaDestino(arch)));
+		return listaDenombresCarpetasDestinos;
+	}
+	
+	public void impNombresCapetasDestinos() {
+		listaDenombresCarpetasDestinos.forEach(nombreCarpeta -> System.out.println(nombreCarpeta));
+	}
+	
+	/*
+	public String nombreCarpetaDestino(File archivo) {
+		//retorna el nombre de la carpeta donde se guardaran las img
+		return getAnioArchivo(archivo)+"_"+mesAmesNombre(getMesArchivo(archivo));
+	}
+	*/
+
+	
+	/*
+	public Path pathArchivoDestino(Path destino) {
+		//retorna el path de la carpeta destino completo
+		return FileSystems.getDefault().getPath(pathDestino.toString() + "\\" + destino.toString());
+	}
+	*/
+	
+	
+	/*
+	public void moverArchivo(File archivo){
+	   
+	    try {
+	        Files.move(pathOrigen, archivo.pathArchivoDestino(pathDestino, archivo));
+	    } catch (IOException e) {
+	        System.err.println(e);
+	    }
+	}
+	*/
+	/*
+	public void crearCarpeta() {
 		//crea una carpeta con el nombre del archivo que se alocara.
 		//si ya existe la carpeta no la crea.
-		File dir = new File(pathArchivoDestino);
+		File dir = new File(path.toString());
         if (!dir.exists()) {
             if (dir.mkdirs()) {
                 System.out.println("Directorio creado");
@@ -109,5 +144,5 @@ public class Archivo {
         	System.out.println("Uno o mas directorios ya existen");
         }
 	}
-	
-}
+	*/
+	}
