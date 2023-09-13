@@ -17,7 +17,7 @@ public class principal {
 		String pathDestino = "C:\\Users\\diazm\\Desktop";
 		
 		Path origen = FileSystems.getDefault().getPath(path);
-		Path destino = FileSystems.getDefault().getPath(path);
+		Path destino = FileSystems.getDefault().getPath(pathDestino);
 		
 		TratamientoImg ti = new TratamientoImg(origen, destino);
 		
@@ -32,6 +32,23 @@ public class principal {
 		ti.nombresCarpetasDestinos();
 		ti.impNombresCapetasDestinos();
 		
+		System.out.println("Ruta completa destino");
+		Path nameFileDest = ti.pathArchivoDestino(ti.nombreCarpetaDestino(ti.archivos().get(0)));
+		System.out.println(nameFileDest);
+		
+		System.out.println("Lista de rutas destino");
+		ti.listaPathArchivosDestinos();
+		ti.impListaPathArchivosDestino();
+		
+		System.out.println("Crear una carpeta");
+		ti.crearCarpeta(nameFileDest);
+		
+		System.out.println("Crear carpetas");
+		ti.crearCarpetas();
+		
+		System.out.println("Moviendo archivo");
+		File archivito = ti.archivos().get(0);
+		ti.moverArchivo(archivito, nameFileDest);
 	}
 
 }

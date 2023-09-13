@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 public class TratamientoImg {
 	
-	Path pathOrigen;
-	Path pathDestino;
-	List<File> archivos;
-	List<String> listaDenombresCarpetasDestinos;
-	//List<Path> rutas;
+	private Path pathOrigen;
+	private Path pathDestino;
+	private List<File> archivos;
+	private ArrayList<String> listaDenombresCarpetasDestinos = new ArrayList<String>();
+	private ArrayList<Path> rutasDestino = new ArrayList<Path>();
 	
 	public TratamientoImg(Path pathOrigen, Path pathDestino) {
 		this.pathOrigen = pathOrigen;
@@ -92,7 +92,7 @@ public class TratamientoImg {
 		return getAnioArchivo(archivo)+"_"+ mesNumeroAMesNombre(getMesArchivo(archivo));
 	}
 	
-	public List<String> nombresCarpetasDestinos(){
+	public ArrayList<String> nombresCarpetasDestinos(){
 		archivos.forEach(arch -> 		
 			listaDenombresCarpetasDestinos.add(nombreCarpetaDestino(arch)));
 		return listaDenombresCarpetasDestinos;
@@ -102,37 +102,38 @@ public class TratamientoImg {
 		listaDenombresCarpetasDestinos.forEach(nombreCarpeta -> System.out.println(nombreCarpeta));
 	}
 	
-	/*
-	public String nombreCarpetaDestino(File archivo) {
-		//retorna el nombre de la carpeta donde se guardaran las img
-		return getAnioArchivo(archivo)+"_"+mesAmesNombre(getMesArchivo(archivo));
-	}
-	*/
-
 	
-	/*
-	public Path pathArchivoDestino(Path destino) {
+	public Path pathArchivoDestino(String carpeta) {
 		//retorna el path de la carpeta destino completo
-		return FileSystems.getDefault().getPath(pathDestino.toString() + "\\" + destino.toString());
+		return FileSystems.getDefault().getPath(pathDestino.toString() + "\\" + carpeta);
 	}
-	*/
+	
+	public ArrayList listaPathArchivosDestinos() {
+		listaDenombresCarpetasDestinos.forEach(carpeta -> 
+			rutasDestino.add(pathArchivoDestino(carpeta)));
+		return rutasDestino;
+	}
+	
+	public void impListaPathArchivosDestino() {
+		rutasDestino.forEach(path -> System.out.println(path.toString()));
+	}
 	
 	
-	/*
-	public void moverArchivo(File archivo){
+	public void moverArchivo(File archivo, Path carpetaDestino){
 	   
 	    try {
-	        Files.move(pathOrigen, archivo.pathArchivoDestino(pathDestino, archivo));
+	    	Path carpetaArchivo = FileSystems.getDefault().getPath(carpetaDestino.toString() + "\\" +archivo.getName());
+	    	Files.move(archivo.toPath(), carpetaArchivo, StandardCopyOption.REPLACE_EXISTING);
 	    } catch (IOException e) {
 	        System.err.println(e);
 	    }
 	}
-	*/
-	/*
-	public void crearCarpeta() {
+	
+	
+	public void crearCarpeta(Path pathCarpeta) {
 		//crea una carpeta con el nombre del archivo que se alocara.
 		//si ya existe la carpeta no la crea.
-		File dir = new File(path.toString());
+		File dir = new File(pathCarpeta.toString());
         if (!dir.exists()) {
             if (dir.mkdirs()) {
                 System.out.println("Directorio creado");
@@ -144,5 +145,9 @@ public class TratamientoImg {
         	System.out.println("Uno o mas directorios ya existen");
         }
 	}
-	*/
+	
+	public void crearCarpetas() {
+		rutasDestino.forEach(pathCarpeta -> crearCarpeta(pathCarpeta));
+	}
+	
 	}
