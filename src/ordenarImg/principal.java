@@ -26,7 +26,7 @@ public class principal {
 		System.out.println("path de imagenes");
 		ti.impPathArchivos();
 		System.out.println("nombre de carpeta destino");
-		System.out.println(ti.nombreCarpetaDestino(ti.archivos().get(0))) ;
+		System.out.println(ti.nombreCarpetaDestino(ti.archivos().get(0)));
 		
 		System.out.println("Lista de nombres de carpeta");
 		ti.nombresCarpetasDestinos();
@@ -49,6 +49,9 @@ public class principal {
 		System.out.println("Moviendo archivo");
 		File archivito = ti.archivos().get(0);
 		ti.moverArchivo(archivito, nameFileDest);
+		
+		System.out.println("Moviendo archivosss");
+		ti.moverArchivos();
 	}
 
 }

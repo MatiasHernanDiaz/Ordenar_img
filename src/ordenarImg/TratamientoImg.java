@@ -16,16 +16,33 @@ public class TratamientoImg {
 	private List<File> archivos;
 	private ArrayList<String> listaDenombresCarpetasDestinos = new ArrayList<String>();
 	private ArrayList<Path> rutasDestino = new ArrayList<Path>();
+	private ArrayList<String> extensiones = new ArrayList<String>(Arrays.asList("jpeg", "png", "jpg"));
 	
 	public TratamientoImg(Path pathOrigen, Path pathDestino) {
 		this.pathOrigen = pathOrigen;
 		this.pathDestino = pathDestino;
 		this.archivos = this.archivos();
 	}
+	/*
+	public List<File> archivos (){
+		//retorna una List de objetos File
+		ArrayList<File> aux = new ArrayList<File>() ;
+		File carpeta = new File(pathOrigen.toString());
+		List<File> temporal = Arrays.asList(carpeta.listFiles());
+		for(int i = 0; i < temporal.size(); i++) {
+			if(validarExtension(temporal.get(i))) {
+				aux.add(temporal.get(i));
+			}
+		}
+		return aux;  
+	}
+	*/
 	
 	public List<File> archivos (){
 		//retorna una List de objetos File
-		File carpeta = new File(pathOrigen.toString());	
+		
+		File carpeta = new File(pathOrigen.toString());
+		
 		return Arrays.asList(carpeta.listFiles());  
 	}
 	
@@ -129,6 +146,13 @@ public class TratamientoImg {
 	    }
 	}
 	
+	public void moverArchivos() {
+		for(int i = 0; i < archivos.size(); i++) {
+			for(int j = 0; j < rutasDestino.size(); j++) {
+				moverArchivo(archivos.get(i), rutasDestino.get(j));
+			}	
+		}
+	}
 	
 	public void crearCarpeta(Path pathCarpeta) {
 		//crea una carpeta con el nombre del archivo que se alocara.
@@ -149,5 +173,11 @@ public class TratamientoImg {
 	public void crearCarpetas() {
 		rutasDestino.forEach(pathCarpeta -> crearCarpeta(pathCarpeta));
 	}
+	
+	public boolean validarExtension(File archivo) {
+		return extensiones.contains(getFormato(archivo));
+	}
+	
+	
 	
 	}
